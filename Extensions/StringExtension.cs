@@ -39,8 +39,7 @@ namespace ExcelTranslator.Extensions {
                 break;
             case NamingStyle.ALL_UPPER: // TODO
                 break;
-            default:
-                throw new ArgumentOutOfRangeException(nameof(style), style, null);
+            default: throw new ArgumentOutOfRangeException(nameof(style), style, null);
             }
             return new string(nameCharArr);
         }
