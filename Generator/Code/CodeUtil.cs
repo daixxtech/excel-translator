@@ -1,9 +1,8 @@
 ﻿using ExcelTranslator.Extensions;
-using ExcelTranslator.Generate.Code;
 using System.Collections.Generic;
 using System.Data;
 
-namespace ExcelTranslator.Generate {
+namespace ExcelTranslator.Generator.Code {
     public static class CodeUtil {
         /// <summary> 是否为合法的 DataTable </summary>
         public static bool IsValidDataTable(DataTable dataTable) {

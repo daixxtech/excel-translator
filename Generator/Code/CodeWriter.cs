@@ -1,10 +1,9 @@
-﻿using ExcelTranslator.Generate.Code;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
 
-namespace ExcelTranslator.Generate {
+namespace ExcelTranslator.Generator.Code {
     public static class CodeWriter {
         /// <summary> 从 DataTable 生成 C# 代码 </summary>
         public static string DataTableToCSharp(DataTable dataTable, string excelName, Options options) {

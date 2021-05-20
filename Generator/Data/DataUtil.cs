@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 
-namespace ExcelTranslator.Generate {
+namespace ExcelTranslator.Generator.Data {
     public static class DataUtil {
         /// <summary> 是否为合法的 DataTable </summary>
         public static bool IsValidDataTable(DataTable dataTable) {

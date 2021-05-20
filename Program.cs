@@ -1,6 +1,7 @@
 ﻿using CommandLine;
 using ExcelTranslator.Excel;
-using ExcelTranslator.Generate;
+using ExcelTranslator.Generator.Code;
+using ExcelTranslator.Generator.Data;
 using System;
 using System.Data;
 using System.IO;
@@ -15,7 +16,7 @@ namespace ExcelTranslator {
             parserResult.WithParsed(options => {
                 /* 输出参数信息 */
                 if (!string.IsNullOrEmpty(options.ExcelPath)) {
-                    Console.WriteLine($"       [ExcelPath]: {options.ExcelPath}");
+                    Console.WriteLine($"        [ExcelPath]: {options.ExcelPath}");
                 }
                 if (!string.IsNullOrEmpty(options.JSONPath)) {
                     Console.WriteLine($"        [JSON Path]: {options.JSONPath}");

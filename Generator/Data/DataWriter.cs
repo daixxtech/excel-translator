@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 
-namespace ExcelTranslator.Generate {
+namespace ExcelTranslator.Generator.Data {
     public static class DataWriter {
         /// <summary> 从 DataTable 生成 JSON 文件 </summary>
         public static string DataTableToJSON(DataTable dataTable, Options options) {
