@@ -1,4 +1,5 @@
-﻿using ExcelTranslator.Extensions;
+﻿using ExcelTranslator.Excel;
+using ExcelTranslator.Extensions;
 using System.Collections.Generic;
 using System.Data;
 
@@ -6,7 +7,7 @@ namespace ExcelTranslator.Generator.Data {
     public static class DataUtil {
         /// <summary> 是否为合法的 DataTable </summary>
         public static bool IsValidDataTable(DataTable dataTable) {
-            if (dataTable.TableName.StartsWith("Exclude") || dataTable.TableName.EndsWith("Def")) {
+            if (ExcelUtil.IsSheetIgnored(dataTable.TableName) || ExcelUtil.IsEnumSheet(dataTable.TableName)) {
                 return false;
             }
             return dataTable.Columns.Count >= 1 && dataTable.Rows.Count >= 3;
@@ -19,7 +20,7 @@ namespace ExcelTranslator.Generator.Data {
             DataRow nameRow = dataTable.Rows[0];
             for (int i = 0; i < colCount; i++) {
                 string name = nameRow[dataTable.Columns[i]].ToString();
-                if (string.IsNullOrEmpty(name) || name.StartsWith("Exclude")) {
+                if (string.IsNullOrEmpty(name) || ExcelUtil.IsColumnIgnored(name)) {
                     continue;
                 }
                 nameDict.Add(i, name.ToNamingStyle(style));

@@ -30,6 +30,9 @@ namespace ExcelTranslator {
                 if (!string.IsNullOrEmpty(options.ClassNamePrefix)) {
                     Console.WriteLine($"[Class Name Prefix]: {options.ClassNamePrefix}");
                 }
+                if (!string.IsNullOrEmpty(options.EnumNamePrefix)) {
+                    Console.WriteLine($" [Enum Name Prefix]: {options.EnumNamePrefix}");
+                }
                 /* 开始转译数据 */
                 DateTime startTime = DateTime.Now;
                 Execute(options);
@@ -58,13 +61,11 @@ namespace ExcelTranslator {
                 string excelName = Path.GetFileName(excelPath);
                 Console.WriteLine("[{0}]", excelName);
                 DataTableCollection dataTables = ExcelReader.ReadExcelToDataTables(excelPath);
-                int dataTableCount = dataTables.Count;
-                for (var i = 0; i < dataTableCount; i++) {
-                    DataTable dataTable = dataTables[i];
-                    string dataTableName = string.Format("{0}{1}", options.ClassNamePrefix, dataTable.TableName);
-                    /* 开始转译 DataTable */
-                    Console.WriteLine("  sheet {0}...", dataTableName);
-                    string className = string.IsNullOrEmpty(options.ClassNamePrefix) ? dataTable.TableName : options.ClassNamePrefix + dataTable.TableName;
+                foreach (DataTable dataTable in dataTables) {
+                    /* 开始转换 DataTable */
+                    string sheetName = dataTable.TableName;
+                    Console.WriteLine("  sheet {0}...", sheetName);
+                    string fileName = ExcelUtil.IsEnumSheet(sheetName) ? options.EnumNamePrefix + sheetName.Substring(4) : options.ClassNamePrefix + sheetName;
                     /* 生成 JSON 数据 */
                     Console.WriteLine("    generate json...");
                     string jsonContent = DataWriter.DataTableToJSON(dataTable, options);
@@ -72,7 +73,7 @@ namespace ExcelTranslator {
                         if (!Directory.Exists(options.JSONPath)) {
                             Directory.CreateDirectory(options.JSONPath);
                         }
-                        string jsonPath = string.Format("{0}/{1}.json", options.JSONPath, className);
+                        string jsonPath = string.Format("{0}/{1}.json", options.JSONPath, fileName);
                         File.WriteAllText(jsonPath, jsonContent, Encoding.UTF8);
                     }
                     /* 生成 C# 代码 */
@@ -82,7 +83,7 @@ namespace ExcelTranslator {
                         if (!Directory.Exists(options.CSharpCodePath)) {
                             Directory.CreateDirectory(options.CSharpCodePath);
                         }
-                        string codePath = string.Format("{0}/{1}.cs", options.CSharpCodePath, className);
+                        string codePath = string.Format("{0}/{1}.cs", options.CSharpCodePath, fileName);
                         File.WriteAllText(codePath, codeContent, Encoding.UTF8);
                     }
                 }

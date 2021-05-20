@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using ExcelTranslator.Excel;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
@@ -15,11 +16,12 @@ namespace ExcelTranslator.Generator.Code {
             builder.AppendLine();
             builder.AppendFormat("namespace {0} {{", options.ClassNamespace).AppendLine();
 
-            List<EnumMember> members = CodeUtil.GetEnumMembers(dataTable);
-            if (members != null) {
+            if (ExcelUtil.IsEnumSheet(dataTable.TableName)) {
                 /* 生成枚举类 */
+                string enumName = options.EnumNamePrefix + dataTable.TableName.Substring(4);
+                List<EnumMember> members = CodeUtil.GetEnumMembers(dataTable);
                 builder.AppendFormat("    /// <summary> Generate From {0} </summary>", excelName).AppendLine();
-                builder.AppendFormat("    public enum E{0} {{", dataTable.TableName).AppendLine();
+                builder.AppendFormat("    public enum {0} {{", enumName).AppendLine();
                 // 枚举成员
                 foreach (var member in members) {
                     builder.AppendFormat("        /// <summary> {0} </summary>", member.comment).AppendLine();
@@ -29,7 +31,7 @@ namespace ExcelTranslator.Generator.Code {
             } else {
                 /* 生成数据类 */
                 string className = options.ClassNamePrefix + dataTable.TableName;
-                List<ClassField> fields = CodeUtil.GetClassFields(dataTable, options);
+                List<ClassField> fields = CodeUtil.GetClassFields(dataTable);
                 builder.AppendFormat("    /// <summary> Generate From {0} </summary>", excelName).AppendLine();
                 builder.AppendFormat("    public class {0} {{", className).AppendLine();
                 // 字段

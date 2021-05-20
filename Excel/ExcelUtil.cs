@@ -20,5 +20,20 @@ namespace ExcelTranslator.Excel {
             Console.WriteLine("Only support excel with .xlsx extension. Excel name: {0}", Path.GetFileName(excelPath));
             return false;
         }
+
+        /// <summary> 是否忽略该表格 </summary>
+        public static bool IsSheetIgnored(string sheetName) {
+            return sheetName.StartsWith("Ignore");
+        }
+
+        /// <summary> 是否为枚举表格 </summary>
+        public static bool IsEnumSheet(string sheetName) {
+            return sheetName.StartsWith("Enum");
+        }
+
+        /// <summary> 是否忽略该列 </summary>
+        public static bool IsColumnIgnored(string columnName) {
+            return columnName.StartsWith("Ignore");
+        }
     }
 }
