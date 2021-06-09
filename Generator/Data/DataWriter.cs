@@ -31,14 +31,14 @@ namespace ExcelTranslator.Generator.Data {
                     }
                     object value = row[dataTable.Columns[j]];
                     obj[name] = type switch {
-                        "bool" => (string) value == "true",
-                        "int" => (int) (double) value,
-                        "float" => value,
-                        "string" => value,
-                        "bool[]" => ((string) value).Split(",").Select(cell => cell == "true"),
-                        "int[]" => ((string) value).Split(",").Select(int.Parse),
-                        "float[]" => ((string) value).Split(",").Select(float.Parse),
-                        "string[]" => ((string) value).Split(","),
+                        "bool" => value is DBNull ? false : (string) value == "true",
+                        "int" => value is DBNull ? 0 : (int) (double) value,
+                        "float" => value is DBNull ? 0.0F : value,
+                        "string" => value is DBNull ? null : value,
+                        "bool[]" => value is DBNull ? null : ((string) value).Split(",").Select(cell => cell == "true"),
+                        "int[]" => value is DBNull ? null : ((string) value).Split(",").Select(int.Parse),
+                        "float[]" => value is DBNull ? null : ((string) value).Split(",").Select(float.Parse),
+                        "string[]" => value is DBNull ? null : ((string) value).Split(","),
                         var _ => throw new Exception($"Unsupported type: {type}")
                     };
                 }
