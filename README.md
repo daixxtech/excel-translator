@@ -15,6 +15,7 @@
 | -c       | --csharp       | true     |        | C# 文件的生成路径。      |
 | -C       | --class_prefix | false    |        | 数据类的前缀。           |
 | -E       | --enum_prefix  | false    |        | 枚举类的前缀。           |
+| -P       | --param_prefix | false    |        | 参数类的前缀。           |
 | -n       | --namespace    | false    | Config | 命名空间。（仅用于C#）   |
 
 ## Excel 规范
@@ -22,6 +23,8 @@
 Sheet 名称以"Ignore"为前缀，则不会生成数据及代码。
 
 Sheet 名称以"Enum"为前缀，会被识别为枚举 Sheet，不生成数据，仅生成枚举类。
+
+Sheet 名称以"Param"为前缀，会被识别为参数 Sheet，不生成数据，仅生成参数类。
 
 ### 数据 Sheet
 
@@ -52,3 +55,15 @@ Sheet 的第一列为枚举值，第二列为枚举名称，第三列为枚举�
 | Sheet 名称  | 运行参数中的枚举类前缀 | 最终生成的枚举类的名称 |
 | ----------- | ---------------------- | ---------------------- |
 | EnumStudent | E                      | EStudent               |
+
+### 参数 Sheet
+
+Sheet 的第一列为参数名，第二列为参数类型，第三列为参数值，第四列为注释，其余列不做处理。
+
+![example_param-sheet](README.assets/example_param-sheet.png)
+
+生成代码时，会将 Sheet 名称的前缀"Param"替换为运行参数中的参数类前缀，作为对应参数类的名称。
+
+| Sheet 名称    | 运行参数中的参数类前缀 | 最终生成的参数类的名称 |
+| ------------- | ---------------------- | ---------------------- |
+| ParamSettings | P                      | PSettings              |

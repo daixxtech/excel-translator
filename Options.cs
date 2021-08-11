@@ -17,7 +17,10 @@ namespace ExcelTranslator {
         [Option('E', "enum_prefix", Required = false, HelpText = "generate enum name with specified prefix.")]
         public string EnumNamePrefix { get; set; }
 
+        [Option('P', "param_prefix", Required = false, HelpText = "generate param name with specified prefix.")]
+        public string ParamNamePrefix { get; set; }
+
         [Option('n', "namespace", Required = false, Default = "Config", HelpText = "generate code in specified namespace. (only csharp)")]
-        public string ClassNamespace { get; set; }
+        public string Namespace { get; set; }
     }
 }

@@ -1,9 +1,7 @@
 ﻿using ExcelTranslator.Extensions;
 using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
 
 namespace ExcelTranslator.Generator.Data {
     public static class DataWriter {
@@ -30,17 +28,7 @@ namespace ExcelTranslator.Generator.Data {
                         continue;
                     }
                     object value = row[dataTable.Columns[j]];
-                    obj[name] = type switch {
-                        "bool" => value is DBNull ? false : (string) value == "true",
-                        "int" => value is DBNull ? 0 : (int) (double) value,
-                        "float" => value is DBNull ? 0.0F : value,
-                        "string" => value is DBNull ? null : value,
-                        "bool[]" => value is DBNull ? null : ((string) value).Split(",").Select(cell => cell == "true"),
-                        "int[]" => value is DBNull ? null : ((string) value).Split(",").Select(int.Parse),
-                        "float[]" => value is DBNull ? null : ((string) value).Split(",").Select(float.Parse),
-                        "string[]" => value is DBNull ? null : ((string) value).Split(","),
-                        var _ => throw new Exception($"Unsupported type: {type}")
-                    };
+                    obj[name] = DataUtil.DataTableValueToDataForm(type, value);
                 }
                 dict[id] = obj;
             }

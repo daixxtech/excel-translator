@@ -26,14 +26,20 @@ namespace ExcelTranslator.Excel {
             return sheetName.StartsWith("Ignore");
         }
 
-        /// <summary> 是否为枚举表格 </summary>
-        public static bool IsEnumSheet(string sheetName) {
-            return sheetName.StartsWith("Enum");
-        }
-
         /// <summary> 是否忽略该列 </summary>
         public static bool IsColumnIgnored(string columnName) {
             return columnName.StartsWith("Ignore");
+        }
+
+        /// <summary> 获取表格的类型 </summary>
+        public static ESheet GetSheetType(string sheetName) {
+            if (sheetName.StartsWith("Enum")) {
+                return ESheet.EnumSheet;
+            }
+            if (sheetName.StartsWith("Param")) {
+                return ESheet.ParamSheet;
+            }
+            return ESheet.ClassSheet;
         }
     }
 }

@@ -24,14 +24,17 @@ namespace ExcelTranslator {
                 if (!string.IsNullOrEmpty(options.CSharpCodePath)) {
                     Console.WriteLine($" [CSharp Code Path]: {options.CSharpCodePath}");
                 }
-                if (!string.IsNullOrEmpty(options.ClassNamespace)) {
-                    Console.WriteLine($"  [Class Namespace]: {options.ClassNamespace}");
+                if (!string.IsNullOrEmpty(options.Namespace)) {
+                    Console.WriteLine($"  [Class Namespace]: {options.Namespace}");
                 }
                 if (!string.IsNullOrEmpty(options.ClassNamePrefix)) {
                     Console.WriteLine($"[Class Name Prefix]: {options.ClassNamePrefix}");
                 }
                 if (!string.IsNullOrEmpty(options.EnumNamePrefix)) {
                     Console.WriteLine($" [Enum Name Prefix]: {options.EnumNamePrefix}");
+                }
+                if (!string.IsNullOrEmpty(options.ParamNamePrefix)) {
+                    Console.WriteLine($" [Param Name Prefix]: {options.ParamNamePrefix}");
                 }
                 /* 开始转译数据 */
                 DateTime startTime = DateTime.Now;
@@ -64,8 +67,16 @@ namespace ExcelTranslator {
                 foreach (DataTable dataTable in dataTables) {
                     /* 开始转换 DataTable */
                     string sheetName = dataTable.TableName;
-                    Console.WriteLine("  sheet {0}...", sheetName);
-                    string fileName = ExcelUtil.IsEnumSheet(sheetName) ? options.EnumNamePrefix + sheetName.Substring(4) : options.ClassNamePrefix + sheetName;
+                    int rowsCount = dataTable.Rows.Count;
+                    int columnsCount = dataTable.Columns.Count;
+                    Console.WriteLine("  sheet {0}(rows: {1}, column: {2})...", sheetName, rowsCount.ToString(), columnsCount.ToString());
+                    ESheet sheetType = ExcelUtil.GetSheetType(sheetName);
+                    string fileName = sheetType switch {
+                        ESheet.EnumSheet => options.EnumNamePrefix + sheetName.Substring(4),
+                        ESheet.ParamSheet => options.ParamNamePrefix + sheetName.Substring(5),
+                        ESheet.ClassSheet => options.ClassNamePrefix + sheetName,
+                        _ => null
+                    };
                     /* 生成 JSON 数据 */
                     Console.WriteLine("    generate json...");
                     string jsonContent = DataWriter.DataTableToJSON(dataTable, options);
