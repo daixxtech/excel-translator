@@ -18,7 +18,7 @@ namespace ExcelTranslator.Generator.Data {
         /// <summary> DataTable 的值转换为数据形式 </summary>
         public static object DataTableValueToDataForm(string type, object value) {
             return type switch {
-                "bool" => value is DBNull ? false : value.ToString()?.ToLower() == "true",
+                "bool" => value is DBNull ? false : value is double ? Math.Abs((double) value - 1) < 1E-6 : (bool) value,
                 "int" => value is DBNull ? 0 : (int) (double) value,
                 "float" => value is DBNull ? 0.0F : value,
                 "string" => value is DBNull ? null : value,

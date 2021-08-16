@@ -18,7 +18,7 @@ namespace ExcelTranslator.Generator.Code {
         /// <summary> DataTable 的值转换为代码形式 </summary>
         public static string DataTableValueToCodeForm(string type, object value) {
             return type switch {
-                "bool" => value is DBNull ? "false" : (string) value,
+                "bool" => value is DBNull ? "false" : (value is double ? Math.Abs((double) value - 1) < 1E-6 : (bool) value).ToString().ToLower(),
                 "int" => value is DBNull ? "0" : ((int) (double) value).ToString(),
                 "float" => value is DBNull ? "0.0F" : string.Format("{0}F", value),
                 "string" => value is DBNull ? "\"\"" : string.Format("\"{0}\"", value),
