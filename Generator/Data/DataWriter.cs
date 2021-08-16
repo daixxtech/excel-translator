@@ -1,5 +1,6 @@
 ﻿using ExcelTranslator.Extensions;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Data;
 
@@ -28,7 +29,13 @@ namespace ExcelTranslator.Generator.Data {
                         continue;
                     }
                     object value = row[dataTable.Columns[j]];
-                    obj[name] = DataUtil.DataTableValueToDataForm(type, value);
+                    try {
+                        obj[name] = DataUtil.DataTableValueToDataForm(type, value);
+                    } catch (Exception exception) {
+                        Console.WriteLine("[Error] Exception at sheet {0}, row: {1}, col: {2}", dataTable.TableName, (i + 1).ToString(), (j + 1).ToString());
+                        Console.WriteLine(exception);
+                        throw;
+                    }
                 }
                 dict[id] = obj;
             }

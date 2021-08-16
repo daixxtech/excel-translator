@@ -1,4 +1,5 @@
 ﻿using ExcelTranslator.Excel;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -39,8 +40,14 @@ namespace ExcelTranslator.Generator.Code {
                 // 静态只读字段
                 foreach (var field in paramFields) {
                     builder.AppendFormat("        /// <summary> {0} </summary>", field.comment).AppendLine();
-                    string value = CodeUtil.DataTableValueToCodeForm(field.type, field.value);
-                    builder.AppendFormat("        public static readonly {0} {1} = {2};", field.type, field.name, value).AppendLine();
+                    try {
+                        string value = CodeUtil.DataTableValueToCodeForm(field.type, field.value);
+                        builder.AppendFormat("        public static readonly {0} {1} = {2};", field.type, field.name, value).AppendLine();
+                    } catch (Exception exception) {
+                        Console.WriteLine("[Error] Exception at sheet {0}, row: {1}", dataTable.TableName, (paramFields.IndexOf(field) + 1).ToString());
+                        Console.WriteLine(exception);
+                        throw;
+                    }
                 }
                 builder.AppendLine("    }");
                 builder.AppendLine("}");
